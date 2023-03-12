@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderingCardTest {
@@ -25,13 +26,15 @@ public class OrderingCardTest {
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
         driver.get("http://localhost:9999");
-  }
+
+    }
 
     @AfterEach
     void teardown() {
         driver.quit();
         driver = null;
-  }
+    }
+
     @Test
     void testFormSubmission() {
         // Find the form fields and fill them in
@@ -48,6 +51,7 @@ public class OrderingCardTest {
         String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText().trim();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", actual);
     }
+
     @Test
     void testNameWithDash() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Михаил Салтыков-Щедрин");
@@ -57,6 +61,7 @@ public class OrderingCardTest {
         String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText().trim();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", actual);
     }
+
     @Test
     void testNameWithApostrophe() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Жанна Д'Арк");
@@ -66,6 +71,7 @@ public class OrderingCardTest {
         String actualNameError = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
         assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", actualNameError);
     }
+
     @Test
     void testShortName() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Ян Лао");
@@ -75,19 +81,25 @@ public class OrderingCardTest {
         String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText().trim();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", actual);
     }
+
     @Test
     void testInvalidFormSubmission() {
         // Find the form fields and fill them in with invalid data
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Ivan");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("1234567890");
+
         // Check the terms and conditions checkbox
         driver.findElement(By.className("checkbox__box")).click();
+
         // Submit the form
         driver.findElement(By.className("button")).click();
+
         // Verify that the error message is displayed
         String actualNameError = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText().trim();
         assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", actualNameError);
+
     }
+
     @Test
     void testInvalidFormSubmissionNumber() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Иванов");
@@ -96,7 +108,9 @@ public class OrderingCardTest {
         driver.findElement(By.className("button")).click();
         String actualPhoneError = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText().trim();
         assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", actualPhoneError);
+
     }
+
     @Test
     void testFormSubmissionWithEmptyNameField() {
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79881232321");
@@ -105,6 +119,7 @@ public class OrderingCardTest {
         String errorMessage = driver.findElement(By.cssSelector("[data-test-id='name'] span.input__sub")).getText();
         assertEquals("Поле обязательно для заполнения", errorMessage);
     }
+
     @Test
     void testFormSubmissionWithEmptyPhoneField() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Иванов");
@@ -113,6 +128,7 @@ public class OrderingCardTest {
         String errorMessage = driver.findElement(By.cssSelector("[data-test-id='phone'] span.input__sub")).getText();
         assertEquals("Поле обязательно для заполнения", errorMessage);
     }
+
     @Test
     void testFormSubmissionWithUncheckedCheckbox() {
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван Иванов");
@@ -123,3 +139,4 @@ public class OrderingCardTest {
     }
 
 }
+
